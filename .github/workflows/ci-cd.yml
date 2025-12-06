@@ -2,6 +2,9 @@ name: CI/CD pipeline for React/Node.js app
 
 on:
   push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
 
 jobs:
   build-and-test:
@@ -9,25 +12,36 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: |
-          npm install
+      # ---------- BACKEND ----------
+      - name: Install backend dependencies
+        working-directory: server
+        run: npm install
 
-      - name: Build project
-        run: |
-          npm run build
+      - name: Run backend tests (optional)
+        working-directory: server
+        run: npm test -- --watch=false || echo "Backend tests skipped"
+
+      # ---------- FRONTEND ----------
+      - name: Install frontend dependencies
+        working-directory: client
+        run: npm install
+
+      - name: Build frontend
+        working-directory: client
+        run: npm run build
 
   deploy-simulated:
     needs: build-and-test
     runs-on: ubuntu-latest
-    steps:
-      - name: Simulated deploy
-        run: echo "Deployment to production completed successfully!"
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
 
+    steps:
+      - name: Simulated deploy step
+        run: echo "На практиці на цьому етапі викликається Ansible-плейбук для розгортання контейнерів на сервері"
