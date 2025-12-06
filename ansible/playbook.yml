@@ -1,0 +1,9 @@
+- hosts: webservers
+  become: true
+
+  tasks:
+    - name: Запуск контейнерів Docker Compose
+      command: docker compose up -d
+      args:
+        chdir: ..
+

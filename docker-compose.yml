@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./server
+    container_name: backend
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./client
+    container_name: frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todo
+    ports:
+      - "5432:5432"

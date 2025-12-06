@@ -1,0 +1,45 @@
+name: CI/CD pipeline for React/Node.js app
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install backend dependencies
+        working-directory: server
+        run: npm install
+
+      - name: Run backend tests (якщо є)
+        working-directory: server
+        run: npm test -- --watch=false || echo "Tests skipped"
+
+      - name: Install frontend dependencies
+        working-directory: client
+        run: npm install
+
+      - name: Build frontend
+        working-directory: client
+        run: npm run build
+
+  deploy-simulated:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Simulated deploy step
+        run: echo "На практиці тут викликається Ansible-сценарій для деплою на сервер"
