@@ -35,6 +35,8 @@ jobs:
 
       - name: Build frontend
         working-directory: client
+        env:
+          CI: false
         run: npm run build
 
   deploy-simulated:
@@ -44,4 +46,4 @@ jobs:
 
     steps:
       - name: Simulated deploy step
-        run: echo "На практиці на цьому етапі викликається Ansible-плейбук для розгортання контейнерів на сервері"
+        run: echo "На практиці на цьому етапі викликається Ansible-плейбук для розгортання Docker-контейнерів"
