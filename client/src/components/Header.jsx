@@ -40,7 +40,7 @@ export default function Header() {
                     boxShadow={'base'}
 
                 >
-                    <Box as={Link} to={'/'}>Pern Stack Todo App</Box>
+                    <Box as={Link} to={'/'}>Vadym Rak</Box>
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={5}>
                             <Button onClick={toggleColorMode}>
